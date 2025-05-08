@@ -36,6 +36,34 @@
 </body>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    function loadList() {
+      const data = localStorage.getItem("todos");
+      if (!data) return;
+
+      const items = JSON.parse(data);
+      items.forEach(item => {
+        const li = document.createElement("li");
+        const p = document.createElement("p");
+        const btn = document.createElement("button");
+        p.textContent = item.text;
+        btn.textContent = "X";
+
+        if (item.done) {
+          li.classList.add("done");
+        }
+
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          li.remove();
+          saveList();
+        });
+
+        li.appendChild(p);
+        li.appendChild(btn);
+        myList.appendChild(li);
+      });
+    }
+
     const section = document.querySelector("section");
     const themes = {
       "theme-blue": {
@@ -80,6 +108,17 @@
     const myList = document.querySelector("#list");
     const input = document.querySelector("input");
 
+    function saveList() {
+      const items = [];
+      myList.querySelectorAll("li").forEach(li => {
+        items.push({
+          text: li.querySelector("p").textContent,
+          done: li.classList.contains("done")
+        });
+      });
+      localStorage.setItem("todos", JSON.stringify(items));
+    }
+
     addBtn.addEventListener("click", function () {
       if (input.value === "") {
         alert("내용을 입력해주세요.");
@@ -92,6 +131,7 @@
         btn.addEventListener("click", function (e) {
           e.stopPropagation();
           this.parentElement.remove();
+          saveList(); // 추가
         })
 
         p.appendChild(text);
@@ -102,6 +142,8 @@
         myList.insertBefore(li, myList.firstChild); // 맨 위로
         container.scrollTop = 0;
         input.value = "";
+
+        saveList(); // 추가
       }
     });
 
@@ -115,6 +157,8 @@
         clickedLi.classList.remove("done");
         this.insertBefore(clickedLi, this.firstChild);
       }
+
+      saveList(); // 추가
     });
 
     input.addEventListener("keydown", function (e) {
@@ -122,6 +166,8 @@
         addBtn.click();
       }
     });
+
+    loadList();
   })
 </script>
 
