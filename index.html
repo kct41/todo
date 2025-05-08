@@ -110,7 +110,7 @@
       if (!clickedLi.classList.contains("done")) {
         clickedLi.classList.add("done");
         this.appendChild(clickedLi);
-        container.scrollTop = myList.scrollHeight;
+        container.scrollTop = container.scrollHeight;
       } else {
         clickedLi.classList.remove("done");
         this.insertBefore(clickedLi, this.firstChild);
