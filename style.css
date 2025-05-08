@@ -131,7 +131,7 @@ section {
     }
   }
 
-  .container {
+  .inputContainer {
     display: flex;
     align-items: center;
 
@@ -171,21 +171,21 @@ section {
     height: 100%;
     display: flex;
     justify-content: center;
-    overflow: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
-    margin-top: 10px;
     padding-right: 15px;
     box-sizing: border-box;
+    margin-top: 10px;
 
     ul#list {
       width: 457px;
       height: fit-content;
       padding: 10px 0;
+      box-sizing: content-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-right: -30px;
-      overflow-y: auto;
 
       li {
         width: fit-content;
@@ -198,12 +198,19 @@ section {
         border-radius: 5px;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         cursor: pointer;
+        transition: .2s;
 
         &.done {
           p {
             text-decoration: line-through;
             color: #9e9e9e;
+            transition: .1s;
           }
+        }
+
+        &:hover {
+          transform: scale(1.05);
+          transition: .1s;
         }
 
         button {
@@ -230,10 +237,6 @@ section {
 
         &:last-child {
           margin-bottom: 0;
-        }
-
-        &:hover {
-          transform: scale(1.05);
         }
       }
     }
