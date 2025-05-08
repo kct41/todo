@@ -14,7 +14,12 @@
 </head>
 
 <body>
-  <section>
+  <div class="colorContainer">
+    <div class="color on" data-theme="theme-blue"></div>
+    <div class="color" data-theme="theme-green"></div>
+    <div class="color" data-theme="theme-pink"></div>
+  </div>
+  <section class="theme-blue">
     <div class="bg">
       <h1>To-do list</h1>
       <div class="container">
@@ -23,7 +28,6 @@
       </div>
       <div class="todoContainer">
         <ul id="list">
-          <!-- <li></li> -->
         </ul>
       </div>
     </div>
@@ -31,6 +35,45 @@
 </body>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    const section = document.querySelector("section");
+    const themes = {
+      "theme-blue": {
+        "--bg-color": "linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%)",
+        "--text-color": "#5D9FFF"
+      },
+      "theme-green": {
+        "--bg-color": "linear-gradient(-225deg, #20E2D7 0%, #F9FEA5 100%)",
+        "--text-color": "#0ec0b7"
+      },
+      "theme-pink": {
+        "--bg-color": "linear-gradient(to right, #ffc3a0 0%, #ffafbd 100%)",
+        "--text-color": "#fa6780"
+      }
+    };
+
+    function applyTheme(className) {
+      const theme = themes[className];
+      if (!theme) return;
+      Object.entries(theme).forEach(([key, value]) => {
+        document.documentElement.style.setProperty(key, value);
+      });
+    }
+
+    const colors = document.querySelectorAll(".color");
+
+    colors.forEach(color => {
+      color.addEventListener("click", function (e) {
+        colors.forEach(c => c.classList.remove("on"));
+        color.classList.add("on");
+        const themeName = e.target.dataset.theme;
+        if (!themeName) return;
+
+        section.className = themeName;
+        applyTheme(themeName);
+        console.log(`선택된 테마: ${themeName}`);
+      });
+    });
+
     const addBtn = document.querySelector("#addBtn");
     const container = document.querySelector(".todoContainer");
     const myList = document.querySelector("#list");
@@ -54,7 +97,9 @@
         li.appendChild(p);
         li.appendChild(btn);
         myList.appendChild(li);
-        container.scrollTop = container.scrollHeight;
+
+        myList.insertBefore(li, myList.firstChild); // 맨 위로
+        container.scrollTop = 0;
         input.value = "";
       }
     });
@@ -64,6 +109,7 @@
       if (!clickedLi.classList.contains("done")) {
         clickedLi.classList.add("done");
         this.appendChild(clickedLi);
+        container.scrollTop = container.scrollHeight;
       } else {
         clickedLi.classList.remove("done");
         this.insertBefore(clickedLi, this.firstChild);
