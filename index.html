@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Tektur:wght@400..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <title>투두리스트</title>
+</head>
+
+<body>
+  <section>
+    <div class="bg">
+      <h1>To-do list</h1>
+      <div class="container">
+        <input type="text">
+        <button id="addBtn">add</button>
+      </div>
+      <div class="todoContainer">
+        <ul id="list">
+          <!-- <li></li> -->
+        </ul>
+      </div>
+    </div>
+  </section>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const addBtn = document.querySelector("#addBtn");
+    const container = document.querySelector(".todoContainer");
+    const myList = document.querySelector("#list");
+    const input = document.querySelector("input");
+
+    addBtn.addEventListener("click", function () {
+      if (input.value === "") {
+        alert("내용을 입력해주세요.");
+      } else {
+        const li = document.createElement("li");
+        const p = document.createElement("p");
+        const btn = document.createElement("button");
+        const text = document.createTextNode(input.value);
+        btn.textContent = "X";
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          this.parentElement.remove();
+        })
+
+        p.appendChild(text);
+        li.appendChild(p);
+        li.appendChild(btn);
+        myList.appendChild(li);
+        container.scrollTop = container.scrollHeight;
+        input.value = "";
+      }
+    });
+
+    myList.addEventListener("click", function (e) {
+      const clickedLi = e.target.closest("li");
+      if (!clickedLi.classList.contains("done")) {
+        clickedLi.classList.add("done");
+        this.appendChild(clickedLi);
+      } else {
+        clickedLi.classList.remove("done");
+        this.insertBefore(clickedLi, this.firstChild);
+      }
+    });
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        addBtn.click();
+      }
+    });
+  })
+</script>
+
+</html>
